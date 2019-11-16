@@ -55,11 +55,12 @@ module Axlsx
       super(str) do
 
         colors.each_with_index do |c, index|
-          str << '<c:dPt>'
-          str << ('<c:idx val="' << index.to_s << '"/>')
+          # str << '<c:dPt>'
+          # str << ('<c:idx val="' << index.to_s << '"/>')
           str << '<c:spPr><a:solidFill>'
           str << ('<a:srgbClr val="' << c << '"/>')
-          str << '</a:solidFill></c:spPr></c:dPt>'
+          # str << '</a:solidFill></c:spPr></c:dPt>'
+          str << '</a:solidFill></c:spPr>'
         end
 
         @labels.to_xml_string(str) unless @labels.nil?
