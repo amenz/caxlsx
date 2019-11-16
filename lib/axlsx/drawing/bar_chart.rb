@@ -59,7 +59,7 @@ module Axlsx
     # The overlap between bar or column clusters, as a percentage of the bar or column width.
     # @return [String]
     def overlap
-      @overlap ||= '0%'
+      @overlap ||= '0'
     end
 
     # validation regex for gap amount percent
@@ -122,7 +122,7 @@ module Axlsx
 
     # overlap between bar or column clusters, as a percentage of the bar or column width.
     def overlap=(v)
-      RegexValidator.validate "BarChart.overlap", GAP_AMOUNT_PERCENT, v
+      # RegexValidator.validate "BarChart.overlap", GAP_AMOUNT_PERCENT, v
       @overlap=(v)
     end
 
@@ -135,9 +135,9 @@ module Axlsx
         str << ('<c:barDir val="' << bar_dir.to_s << '"/>')
         str << ('<c:grouping val="' << grouping.to_s << '"/>')
         str << ('<c:varyColors val="' << vary_colors.to_s << '"/>')
-        str << ('<c:overlap val="' << @overlap.to_s << '"/>') unless @overlap.nil?
         @series.each { |ser| ser.to_xml_string(str) }
         @d_lbls.to_xml_string(str) if @d_lbls
+        str << ('<c:overlap val="' << @overlap.to_s << '"/>') unless @overlap.nil?
         str << ('<c:gapWidth val="' << @gap_width.to_s << '"/>') unless @gap_width.nil?
         str << ('<c:gapDepth val="' << @gap_depth.to_s << '"/>') unless @gap_depth.nil?
         str << ('<c:shape val="' << @shape.to_s << '"/>') unless @shape.nil?
