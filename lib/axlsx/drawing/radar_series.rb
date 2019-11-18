@@ -22,6 +22,10 @@ module Axlsx
     # An array of rgb colors to apply to your radar chart.
     attr_reader :colors
 
+    # line width 0-20116800
+    # @return [String]
+    attr_reader :ln_width
+
     # Creates a new series
     # @option options [Array, SimpleTypedList] data
     # @option options [Array, SimpleTypedList] labels
@@ -34,6 +38,7 @@ module Axlsx
       super(chart, options)
       self.labels = AxDataSource.new({:data => options[:labels]}) unless options[:labels].nil?
       self.data = NumDataSource.new(options) unless options[:data].nil?
+      @ln_width = options[:ln_width] unless options[:ln_width].nil?
     end
 
     # @see color
@@ -44,18 +49,32 @@ module Axlsx
     # @see colors
     def colors=(v) DataTypeValidator.validate "RadarSeries.colors", [Array], v; @colors = v end
 
+    # @see ln_width
+    def ln_width=(v)
+      @ln_width = v
+    end
+
     # Serializes the object
     # @param [String] str
     # @return [String]
     def to_xml_string(str = '')
       super(str) do
 
-        if color
+        if color || ln_width
           str << '<c:spPr><a:solidFill>'
-          str << ('<a:srgbClr val="' << color << '"/>')
+          if color
+            str << ('<a:srgbClr val="' << color << '"/>')
+          end
           str << '</a:solidFill>'
-          str << '<a:ln><a:solidFill>'
-          str << ('<a:srgbClr val="' << color << '"/></a:solidFill></a:ln>')
+          str << '<a:ln'
+          if ln_width
+            str << (' w="' << ln_width << '"')
+          end
+          str << '><a:solidFill>'
+          if color
+            str << '<a:srgbClr val="' << color << '"/>'
+          end
+          str << '</a:solidFill></a:ln>'
           str << '</c:spPr>'
         end
 
@@ -70,7 +89,11 @@ module Axlsx
           # str << ('<c:idx val="' << index.to_s << '"/>')
           str << '<c:spPr><a:solidFill>'
           str << ('<a:srgbClr val="' << c << '"/>')
-          str << ('</a:solidFill><a:ln><a:solidFill><a:srgbClr val="' << c << '"/></a:solidFill></a:ln></c:spPr>')
+          str << '</a:solidFill><a:ln'
+          if @ln_width
+            str << (' w="' << @ln_width << '"')
+          end
+          str << ('><a:solidFill><a:srgbClr val="' << c << '"/></a:solidFill></a:ln></c:spPr>')
           # str << '</a:solidFill></c:spPr></c:dPt>'
         end
 
