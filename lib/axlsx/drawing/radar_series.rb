@@ -61,20 +61,19 @@ module Axlsx
       super(str) do
 
         if color || ln_width
-          str << '<c:spPr><a:solidFill>'
+          str << '<c:spPr>'
           if color
-            str << ('<a:srgbClr val="' << color << '"/>')
+            str << ('<a:solidFill><a:srgbClr val="' << color << '"/></a:solidFill>')
           end
-          str << '</a:solidFill>'
           str << '<a:ln'
           if ln_width
             str << (' w="' << ln_width << '"')
           end
-          str << '><a:solidFill>'
+          str << '>'
           if color
-            str << '<a:srgbClr val="' << color << '"/>'
+            str << '<a:solidFill><a:srgbClr val="' << color << '"/></a:solidFill>'
           end
-          str << '</a:solidFill></a:ln>'
+          str << '</a:ln>'
           str << '</c:spPr>'
         end
 
